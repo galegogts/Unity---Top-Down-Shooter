@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 
@@ -18,12 +19,23 @@ public class Score : MonoBehaviour
 
     public VerificarColisaoCamera spawnInicial;
 
+    public Slider VolumeSlider;
+    public GameObject VolumeTxt;
+    float volume;
+
     private void Start() {
+        VolumeSlider.value = PlayerPrefs.GetFloat("Volume");
+
         tempoTotal = PlayerPrefs.GetFloat("GameTime");
         ResetarTempoScore();
         player = FindObjectOfType<Player>().gameObject;
     }
     void Update() {
+        volume = VolumeSlider.value;
+        PlayerPrefs.SetFloat("Volume", volume);
+        VolumeTxt.GetComponent<TextMeshProUGUI>().text = ((int)(volume)).ToString();
+        AudioListener.volume = volume/100;
+
         if (tempo > 0 && player.GetComponent<Life>().vida > 0) tempo -= Time.deltaTime;
         else panel.SetActive(true);
 
